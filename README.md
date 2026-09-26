@@ -54,9 +54,9 @@ Authorize the repositories you want ChatGPT/Codex to access. For repositories ow
 
 Test the connection by asking ChatGPT to inspect the target repository.
 
-## 3. Create a new scientific repository
+## 3. Start a new scientific project
 
-Create a repository on GitHub for the project, then clone it on the workstation:
+Create an **empty** repository on GitHub, then clone it on the workstation:
 
 ```bash
 cd ~/github
@@ -64,7 +64,15 @@ git clone git@github.com:OWNER/REPOSITORY.git
 cd REPOSITORY
 ```
 
-A useful generic starting structure is:
+Open that folder as a Codex workspace.
+
+From this point, bootstrap the project by running these three prompts in order:
+
+1. `prompts/01-initialize-research-repository.md`
+2. `prompts/02-create-living-report.md`
+3. `prompts/03-verify-and-publish.md`
+
+Prompt 01 creates the standard research structure and persistent Codex behavior:
 
 ```text
 REPOSITORY/
@@ -82,7 +90,13 @@ REPOSITORY/
 └── tests/
 ```
 
-Create only the directories the project actually needs. Do not add infrastructure just because it appears in this example.
+It also creates the project `.gitignore`, establishes the scientific/figure/reporting conventions in `AGENTS.md`, commits and pushes `main`.
+
+Prompt 02 creates the science-organized Living Research Report on an orphan `gh-pages` branch.
+
+Prompt 03 performs the final safety, Git and publication checks.
+
+After those three prompts, setup is finished. Normal Codex research prompts should be short.
 
 ## 4. Keep research data out of Git
 
@@ -98,60 +112,31 @@ The template keeps `.gitkeep` placeholders while ignoring the contents of the da
 
 Before making a repository public, audit the **entire Git history**, not only the current tree, for credentials, raw data, proprietary material and accidental large files.
 
-## 5. Initialize Codex for the project
+## 5. Codex behavior after bootstrap
 
-Open the cloned repository as a Codex workspace.
-
-Copy the template `AGENTS.md` into the new repository and edit the project-specific lines at the top.
+Prompt 01 creates the project-specific `AGENTS.md`. That file stores the durable rules so you do not have to repeat them in every prompt.
 
 Use the normal workspace for the continuing research project. Use a worktree only when you deliberately want isolated parallel work.
 
-The point of `AGENTS.md` is to store durable rules once. Routine prompts should remain short.
-
-For example:
+After bootstrap, a normal request can be as short as:
 
 ```text
 Plot the density distributions of cell width and length.
 ```
 
-Codex should already know the project figure/report conventions from `AGENTS.md`.
-
-For a figure that should not appear in the public report:
+For work that should stay out of the public report:
 
 ```text
 Exploratory only: plot the density distributions of cell width and length.
 ```
 
-## 6. Initial Git commit
+## 6. Initial commit and report creation
 
-Once the initial repository structure and project README are correct:
+Prompts 01 and 02 handle the initial commit/push and the Living Research Report. Check their output before continuing.
 
-```bash
-git add .
-git status
-git commit -m "Initialize research project"
-git push -u origin main
-```
+## 7. Final bootstrap check
 
-Check `git status` and the staged files before committing. Large/local datasets should not appear.
-
-## 7. Create the Living Research Report
-
-The report is a **scientific evidence report**, not a dashboard and not a commit log.
-
-Use the bootstrap prompt in:
-
-`prompts/bootstrap-living-report.md`
-
-Give that prompt to Codex from the project workspace. It should inspect the actual project before creating the report.
-
-The intended architecture is:
-
-- `main`: research code, lightweight reproducible material and documentation
-- local ignored directories: raw/interim/processed/private data
-- orphan `gh-pages`: sanitized static report and selected presentation assets
-
-The report should be organized by the scientific structure of the project. Git history records how it changed; commits do not define the navigation.
+Run `prompts/03-verify-and-publish.md`. It checks both branches, data exposure, repository state and the report without adding unnecessary infrastructure.
 
 ## 8. Enable GitHub Pages
 
